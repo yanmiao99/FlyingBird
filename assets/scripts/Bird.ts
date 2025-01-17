@@ -13,6 +13,8 @@ import {
   Animation,
 } from 'cc';
 const { ccclass, property } = _decorator;
+import { Tags } from './Tags';
+import { GameManager } from './GameManager';
 
 @ccclass('Bird')
 export class Bird extends Component {
@@ -45,7 +47,7 @@ export class Bird extends Component {
     otherCollider: Collider2D,
     contact: IPhysics2DContact | null
   ) {
-    console.log('otherCollider.tag=======>', otherCollider.tag);
+    // console.log('otherCollider.tag=======>', otherCollider.tag);
   }
 
   // 碰撞结束
@@ -54,7 +56,12 @@ export class Bird extends Component {
     otherCollider: Collider2D,
     contact: IPhysics2DContact | null
   ) {
-    console.log('碰撞结束');
+    // console.log('碰撞结束');
+
+    // 得分
+    if (otherCollider.tag === Tags.PIPE_MIDDLE) {
+      GameManager.inst().addScore(1);
+    }
   }
 
   // 销毁
