@@ -19,5 +19,10 @@ export class Pipe extends Component {
 
     // 移动
     this.node.setPosition(p.x - this.moveSpeed * deltaTime, p.y);
+
+    // 超出屏幕则销毁管道
+    if (p.x <= -900) {
+      this.node.destroy();
+    }
   }
 }
