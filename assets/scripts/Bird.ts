@@ -10,6 +10,7 @@ import {
   Collider2D,
   Contact2DType,
   IPhysics2DContact,
+  Animation,
 } from 'cc';
 const { ccclass, property } = _decorator;
 
@@ -21,6 +22,9 @@ export class Bird extends Component {
   @property
   rotateSpeed: number = 30;
 
+  // 是否能被控制
+  private _canControl: boolean = false;
+
   onLoad() {
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
 
@@ -30,6 +34,9 @@ export class Bird extends Component {
       collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
       collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
     }
+
+    // 获取刚体组件
+    this.rgd2D = this.getComponent(RigidBody2D);
   }
 
   // 碰撞开始
@@ -56,6 +63,8 @@ export class Bird extends Component {
   }
 
   onTouchStart() {
+    if (!this._canControl) return;
+
     // 让小鸟抬头
     this.node.angle = 30;
 
@@ -63,12 +72,11 @@ export class Bird extends Component {
     this.rgd2D.linearVelocity = new Vec2(0, 10); // 10 为向上的速度
   }
 
-  protected start(): void {
-    // 获取刚体组件
-    this.rgd2D = this.getComponent(RigidBody2D);
-  }
+  protected start(): void {}
 
   protected update(deltaTime: number): void {
+    if (!this._canControl) return;
+
     // 旋转
     this.node.angle -= this.rotateSpeed * deltaTime;
 
@@ -76,5 +84,17 @@ export class Bird extends Component {
     if (this.node.angle < -this.rotateSpeed) {
       this.node.angle = -this.rotateSpeed;
     }
+  }
+
+  // 设置是否能被控制
+  public setCanControl(canControl: boolean) {
+    // 如果不能被控制，刚体速度归零
+    this.rgd2D.enabled = canControl;
+
+    // 是否能被控制
+    this._canControl = canControl;
+
+    // 控制动画
+    this.getComponent(Animation).enabled = canControl;
   }
 }

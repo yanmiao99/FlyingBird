@@ -15,9 +15,14 @@ export class PipeSpawner extends Component {
   // 计时器
   private timer: number = 0;
 
+  // 是否正在生成
+  private _isSpawning: boolean = false;
+
   start() {}
 
   update(deltaTime: number) {
+    if (!this._isSpawning) return;
+
     // 计时
     this.timer += deltaTime;
 
@@ -40,5 +45,10 @@ export class PipeSpawner extends Component {
       // 设置管道位置
       pipeInst.setPosition(pLocal.x, y);
     }
+  }
+
+  // 设置是否生成
+  public setSpawning(isSpawning: boolean) {
+    this._isSpawning = isSpawning;
   }
 }

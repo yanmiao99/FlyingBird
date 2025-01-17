@@ -17,12 +17,17 @@ export class MoveBg extends Component {
   // 移动速度
   private moveSpeed: number = 100;
 
+  // 是否能移动
+  private _isMove: boolean = false;
+
   start() {
     this.moveSpeed = GameManager.inst().moveSpeed;
   }
 
   update(deltaTime: number) {
     // deltaTime 两帧之间的时间间隔
+
+    if (!this._isMove) return;
 
     // 移动距离
     const moveDistance = this.moveSpeed * deltaTime;
@@ -53,5 +58,10 @@ export class MoveBg extends Component {
       // 设置背景2的位置
       this.target2ToMove.setPosition(p1.x + bgWidth, p2.y);
     }
+  }
+
+  // 控制移动
+  public setMove(isMove: boolean) {
+    this._isMove = isMove;
   }
 }
