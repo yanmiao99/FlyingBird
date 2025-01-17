@@ -4,6 +4,7 @@ import { _decorator, Component, Node } from 'cc';
 import { Bird } from './Bird';
 import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
+import { GameReadyUi } from './UI/GameReadyUi';
 const { ccclass, property } = _decorator;
 
 // 游戏状态
@@ -40,6 +41,10 @@ export class GameManager extends Component {
   @property(PipeSpawner)
   pipeSpawner: PipeSpawner = null;
 
+  // 引入readyUi
+  @property(GameReadyUi)
+  gameReadyUi: GameReadyUi = null;
+
   // 游戏状态
   curGS: GameState = GameState.Ready;
 
@@ -63,12 +68,21 @@ export class GameManager extends Component {
   }
 
   // 转换到游戏状态
-  transitionToGamingState() {
+  public transitionToGamingState() {
     this.curGS = GameState.Gaming;
+    this.bird.setCanControl(true);
+    this.moveBg.setMove(true);
+    this.pipeSpawner.setSpawning(true);
+
+    // 隐藏readyUi
+    this.gameReadyUi.setShow(false);
   }
 
   // 转换到结束状态
-  transitionToGameOverState() {
+  public transitionToGameOverState() {
     this.curGS = GameState.GameOver;
+    this.bird.setCanControl(false);
+    this.moveBg.setMove(false);
+    this.pipeSpawner.setSpawning(false);
   }
 }

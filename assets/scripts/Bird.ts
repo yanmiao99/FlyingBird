@@ -60,6 +60,12 @@ export class Bird extends Component {
   // 销毁
   onDestroy() {
     input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+
+    let collider = this.getComponent(Collider2D);
+    if (collider) {
+      collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+      collider.off(Contact2DType.END_CONTACT, this.onEndContact, this);
+    }
   }
 
   onTouchStart() {
