@@ -7,6 +7,9 @@ import {
   Input,
   RigidBody2D,
   Vec2,
+  Collider2D,
+  Contact2DType,
+  IPhysics2DContact,
 } from 'cc';
 const { ccclass, property } = _decorator;
 
@@ -20,6 +23,31 @@ export class Bird extends Component {
 
   onLoad() {
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+
+    // 小鸟碰撞检测
+    let collider = this.getComponent(Collider2D);
+    if (collider) {
+      collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+      collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
+    }
+  }
+
+  // 碰撞开始
+  onBeginContact(
+    selfCollider: Collider2D,
+    otherCollider: Collider2D,
+    contact: IPhysics2DContact | null
+  ) {
+    console.log('otherCollider.tag=======>', otherCollider.tag);
+  }
+
+  // 碰撞结束
+  onEndContact(
+    selfCollider: Collider2D,
+    otherCollider: Collider2D,
+    contact: IPhysics2DContact | null
+  ) {
+    console.log('碰撞结束');
   }
 
   // 销毁
