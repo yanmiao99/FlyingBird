@@ -1,5 +1,6 @@
 import { _decorator, Component, director, Label, Node } from 'cc';
 const { ccclass, property } = _decorator;
+import { GameData } from '../GameData';
 
 @ccclass('GameOverUi')
 export class GameOverUi extends Component {
@@ -49,6 +50,9 @@ export class GameOverUi extends Component {
 
   // 重新开始
   public onRestartBtnClick() {
+    // 重置分数
+    GameData.reset();
+
     // 重新加载场景
     director.loadScene(director.getScene().name);
   }

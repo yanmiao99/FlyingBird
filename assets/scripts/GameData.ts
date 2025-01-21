@@ -39,4 +39,9 @@ export class GameData {
       localStorage.setItem(this.SCORE, this._score.toString());
     }
   }
+
+  // 重置分数
+  public static reset() {
+    this._score = 0;
+  }
 }
