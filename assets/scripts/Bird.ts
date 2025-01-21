@@ -48,6 +48,11 @@ export class Bird extends Component {
     contact: IPhysics2DContact | null
   ) {
     // console.log('otherCollider.tag=======>', otherCollider.tag);
+
+    // 碰到地面或者管道, 游戏结束
+    if (otherCollider.tag === Tags.LAND || otherCollider.tag === Tags.PIPE) {
+      GameManager.inst().transitionToGameOverState();
+    }
   }
 
   // 碰撞结束
@@ -100,9 +105,11 @@ export class Bird extends Component {
   }
 
   // 设置是否能被控制
-  public setCanControl(canControl: boolean) {
-    // 如果不能被控制，刚体速度归零
-    this.rgd2D.enabled = canControl;
+  public setCanControl(canControl: boolean, isGameOver: boolean = false) {
+    if (!isGameOver) {
+      // 如果不能被控制，刚体速度归零
+      this.rgd2D.enabled = canControl;
+    }
 
     // 是否能被控制
     this._canControl = canControl;

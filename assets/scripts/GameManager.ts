@@ -6,6 +6,7 @@ import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
 import { GameReadyUi } from './UI/GameReadyUi';
 import { GameData } from './GameData';
+import { GameOverUi } from './UI/GameOverUi';
 const { ccclass, property } = _decorator;
 
 // 游戏状态
@@ -50,6 +51,10 @@ export class GameManager extends Component {
   @property(Node)
   gamingUi: Node = null;
 
+  // 引入overUi
+  @property(GameOverUi)
+  gameOverUi: GameOverUi = null;
+
   // 引入分数
   @property(Label)
   scoreLabel: Label = null;
@@ -77,6 +82,12 @@ export class GameManager extends Component {
 
     // 禁用gamingUi
     this.gamingUi.active = false;
+
+    // 禁用overUi
+    this.gameOverUi.hide();
+
+    // 显示readyUi
+    this.gameReadyUi.setShow(true);
   }
 
   // 转换到游戏状态
@@ -95,10 +106,15 @@ export class GameManager extends Component {
 
   // 转换到结束状态
   public transitionToGameOverState() {
+    if (this.curGS === GameState.GameOver) return;
+
     this.curGS = GameState.GameOver;
-    this.bird.setCanControl(false);
+    this.bird.setCanControl(false, true);
     this.moveBg.setMove(false);
     this.pipeSpawner.setSpawning(false);
+
+    // 显示overUi
+    this.gameOverUi.show(GameData.getScore(), GameData.getBestScore());
   }
 
   // 增加分数

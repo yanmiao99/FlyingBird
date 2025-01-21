@@ -2,6 +2,7 @@
 
 import { _decorator, Component, Node, Prefab, instantiate, math } from 'cc';
 const { ccclass, property } = _decorator;
+import { Pipe } from './Pipe';
 
 @ccclass('PipeSpawner')
 export class PipeSpawner extends Component {
@@ -50,5 +51,16 @@ export class PipeSpawner extends Component {
   // 设置是否生成
   public setSpawning(isSpawning: boolean) {
     this._isSpawning = isSpawning;
+
+    if (!isSpawning) {
+      const children = this.node.children;
+      for (let i = 0; i < children.length; i++) {
+        // 禁用管道
+        const pipe = children[i].getComponent(Pipe);
+        if (pipe) {
+          pipe.enabled = false;
+        }
+      }
+    }
   }
 }
