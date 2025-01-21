@@ -49,7 +49,7 @@ export class GameOverUi extends Component {
 
   // 重新开始
   public onRestartBtnClick() {
-    console.log('点击了重新开始按钮');
+    // 重新加载场景
     director.loadScene(director.getScene().name);
   }
 }

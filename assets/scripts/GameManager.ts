@@ -1,12 +1,13 @@
 // 公共管理类
 
-import { _decorator, Component, Node, Label } from 'cc';
+import { _decorator, Component, Node, Label, AudioClip } from 'cc';
 import { Bird } from './Bird';
 import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
 import { GameReadyUi } from './UI/GameReadyUi';
 import { GameData } from './GameData';
 import { GameOverUi } from './UI/GameOverUi';
+import { AudioMgr } from './AudioMgr';
 const { ccclass, property } = _decorator;
 
 // 游戏状态
@@ -59,6 +60,14 @@ export class GameManager extends Component {
   @property(Label)
   scoreLabel: Label = null;
 
+  // 引入背景音乐
+  @property(AudioClip)
+  bgMusic: AudioClip = null;
+
+  // 引入游戏结束音乐
+  @property(AudioClip)
+  gameOverMusic: AudioClip = null;
+
   // 游戏状态
   curGS: GameState = GameState.Ready;
 
@@ -69,6 +78,7 @@ export class GameManager extends Component {
 
   protected start() {
     this.transitionToReadyState();
+    AudioMgr.inst.play(this.bgMusic, 0.1);
   }
 
   update(deltaTime: number) {}
@@ -107,6 +117,9 @@ export class GameManager extends Component {
   // 转换到结束状态
   public transitionToGameOverState() {
     if (this.curGS === GameState.GameOver) return;
+
+    AudioMgr.inst.stop();
+    AudioMgr.inst.playOneShot(this.gameOverMusic);
 
     this.curGS = GameState.GameOver;
     this.bird.setCanControl(false, true);

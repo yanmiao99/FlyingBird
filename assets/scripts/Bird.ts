@@ -11,10 +11,12 @@ import {
   Contact2DType,
   IPhysics2DContact,
   Animation,
+  AudioClip,
 } from 'cc';
 const { ccclass, property } = _decorator;
 import { Tags } from './Tags';
 import { GameManager } from './GameManager';
+import { AudioMgr } from './AudioMgr';
 
 @ccclass('Bird')
 export class Bird extends Component {
@@ -23,6 +25,10 @@ export class Bird extends Component {
   // 每一秒旋转的角度
   @property
   rotateSpeed: number = 30;
+
+  // 引入背景音乐
+  @property(AudioClip)
+  clickMusic: AudioClip = null;
 
   // 是否能被控制
   private _canControl: boolean = false;
@@ -82,6 +88,9 @@ export class Bird extends Component {
 
   onTouchStart() {
     if (!this._canControl) return;
+
+    // 播放音效
+    AudioMgr.inst.playOneShot(this.clickMusic);
 
     // 让小鸟抬头
     this.node.angle = 30;
